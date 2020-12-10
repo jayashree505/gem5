@@ -56,6 +56,7 @@
 #include "cpu/base.hh"
 #include "cpu/exetrace.hh"
 #include "cpu/timebuf.hh"
+#include "mem/cache/prefetch/rdip.hh"
 #include "debug/Activity.hh"
 #include "debug/Commit.hh"
 #include "debug/CommitRate.hh"
@@ -65,6 +66,10 @@
 #include "params/DerivO3CPU.hh"
 #include "sim/faults.hh"
 #include "sim/full_system.hh"
+
+bool RDIP_Call_Flag = false;   //JS: RDIP
+
+bool RDIP_Return_Flag = false;  //JS: RDIP
 
 using namespace std;
 
@@ -1439,7 +1444,16 @@ DefaultCommit<Impl>::updateComInstStats(const DynInstPtr &inst)
 
     // Function Calls
     if (inst->isCall())
+    {
         statComFunctionCalls[tid]++;
+        RDIP_Call_Flag = true;   //JS: RDIP:23.11.2020
+    }
+
+    //Function Returns
+    if (inst->isReturn())        //JS: RDIP:23.11.2020
+    {
+    	RDIP_Return_Flag = true;
+    }
 
 }
 

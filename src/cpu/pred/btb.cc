@@ -27,10 +27,13 @@
  */
 
 #include "cpu/pred/btb.hh"
+#include "mem/cache/prefetch/rdip.hh"
 
 #include "base/intmath.hh"
 #include "base/trace.hh"
 #include "debug/Fetch.hh"
+
+TheISA::PCState RDIP_Branch_Target= 0; //JS: RDIP
 
 DefaultBTB::DefaultBTB(unsigned _numEntries,
                        unsigned _tagBits,
@@ -135,4 +138,6 @@ DefaultBTB::update(Addr instPC, const TheISA::PCState &target, ThreadID tid)
     btb[btb_idx].valid = true;
     btb[btb_idx].target = target;
     btb[btb_idx].tag = getTag(instPC);
+
+    RDIP_Branch_Target = target; //JS: RDIP: 23.11.2020
 }

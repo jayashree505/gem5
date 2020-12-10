@@ -1,5 +1,4 @@
-/*
- * Copyright (c) 2004-2005 The Regents of The University of Michigan
+/*Copyright (c) 2004-2005 The Regents of The University of Michigan
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,8 +25,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __CPU_PRED_RAS_HH__
-#define __CPU_PRED_RAS_HH__
+#ifndef __CPU_PRED_RDIP_RAS_HH__
+#define __CPU_PRED_RDIP_RAS_HH__
 
 #include <vector>
 
@@ -38,13 +37,13 @@
 //extern TheISA::PCState &RDIP_RAS_TOP; //JS: RDIP: 25.11.2020
 
 /** Return address stack class, implements a simple RAS. */
-class ReturnAddrStack
+class RDIPReturnAddrStack
 {
   public:
     /** Creates a return address stack, but init() must be called prior to
      *  use.
      */
-    ReturnAddrStack() {}
+    RDIPReturnAddrStack() {}
 
     /** Initializes RAS with a specified number of entries.
      *  @param numEntries Number of entries in the RAS.
@@ -54,32 +53,23 @@ class ReturnAddrStack
     void reset();
 
     /** Returns the top address on the RAS. */
-    TheISA::PCState top()
-    { 
-      //RDIP_RAS_TOP = addrStack[tos];   //JS: RDIP: 25.11.2020 
-      return addrStack[tos]; }
+    Addr top()
+    { return addrStack[tos]; }
 
     /** Returns the index of the top of the RAS. */
     unsigned topIdx()
     { return tos; }
 
     /** Pushes an address onto the RAS. */
-    void push(const TheISA::PCState &return_addr);
+    void push(const Addr);
 
     /** Pops the top address from the RAS. */
     void pop();
 
-    /** Changes index to the top of the RAS, and replaces the top address with
-     *  a new target.
-     *  @param top_entry_idx The index of the RAS that will now be the top.
-     *  @param restored The new target address of the new top of the RAS.
-     */
-    void restore(unsigned top_entry_idx, const TheISA::PCState &restored);
-
      bool empty() { return usedEntries == 0; }
 
      bool full() { return usedEntries == numEntries; }
-  private:
+  //private:
     /** Increments the top of stack index. */
     inline void incrTos()
     { if (++tos == numEntries) tos = 0; }
@@ -89,7 +79,7 @@ class ReturnAddrStack
     { tos = (tos == 0 ? numEntries - 1 : tos - 1); }
 
     /** The RAS itself. */
-    std::vector<TheISA::PCState> addrStack;
+    std::vector<Addr> addrStack;
 
     /** The number of entries in the RAS. */
     unsigned numEntries;
@@ -101,4 +91,5 @@ class ReturnAddrStack
     unsigned tos;
 };
 
-#endif // __CPU_PRED_RAS_HH__
+#endif // __CPU_PRED_RDIP_RAS_HH__
+

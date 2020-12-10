@@ -521,3 +521,20 @@ class PIFPrefetcher(QueuedPrefetcher):
         if not isinstance(simObj, SimObject):
             raise TypeError("argument must be of SimObject type")
         self.addEvent(HWPProbeEventRetiredInsts(self, simObj,"RetiredInstsPC"))
+
+class RDIPPrefetcher(QueuedPrefetcher):
+    type = 'RDIPPrefetcher'
+    cxx_class = 'Prefetcher::RDIP'
+    cxx_header = "mem/cache/prefetch/rdip.hh"
+
+    misstable_entries = Param.MemorySize("4096",
+        "Number of entries in the Miss Table")
+    misstable_assoc = Param.Unsigned(4,
+        "Associativity of the Miss Table")
+    misstable_indexing_policy = Param.BaseIndexingPolicy(
+        SetAssociative(entry_size = 1, assoc = Parent.misstable_assoc,
+        size = Parent.misstable_entries),
+        "Indexing policy of the Miss Table")
+    misstable_replacement_policy = Param.BaseReplacementPolicy(LRURP(),
+        "Replacement policy of the Miss Table")
+        

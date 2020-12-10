@@ -44,11 +44,16 @@
 #include <queue>
 
 #include "base/statistics.hh"
+#include "cpu/base.hh"
 #include "cpu/exetrace.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/timebuf.hh"
 #include "enums/CommitPolicy.hh"
 #include "sim/probe/probe.hh"
+
+extern bool RDIP_Call_Flag;   //JS: RDIP: 23.11.2020
+
+extern bool RDIP_Return_Flag;  //JS: RDIP: 23.11.2020
 
 struct DerivO3CPUParams;
 
@@ -324,6 +329,7 @@ class DefaultCommit
     /** Reads the micro PC of a specific thread. */
     Addr microPC(ThreadID tid) { return pc[tid].microPC(); }
 
+    
   private:
     /** Time buffer interface. */
     TimeBuffer<TimeStruct> *timeBuffer;

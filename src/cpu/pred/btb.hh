@@ -34,6 +34,8 @@
 #include "base/types.hh"
 #include "config/the_isa.hh"
 
+extern TheISA::PCState RDIP_Branch_Target; //JS: RDIP: 25.11.2020
+
 class DefaultBTB
 {
   private:
@@ -90,7 +92,7 @@ class DefaultBTB
     void update(Addr instPC, const TheISA::PCState &targetPC,
                 ThreadID tid);
 
-  private:
+    private:
     /** Returns the index into the BTB, based on the branch's PC.
      *  @param inst_PC The branch to look up.
      *  @return Returns the index into the BTB.

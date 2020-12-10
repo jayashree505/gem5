@@ -155,6 +155,7 @@ def config_cache(options, system):
                           "of type", type(dcache.prefetcher), ", using the",
                           "specified by the flag option.")
                 dcache.prefetcher = hwpClass()
+                dcache.prefetcher.registerTLB(system.cpu[i].dtb)
 
             if options.l1i_hwp_type:
                 hwpClass = ObjectList.hwp_list.get(options.l1i_hwp_type)
@@ -164,6 +165,7 @@ def config_cache(options, system):
                           "of type", type(icache.prefetcher), ", using the",
                           "specified by the flag option.")
                 icache.prefetcher = hwpClass()
+                icache.prefetcher.registerTLB(system.cpu[i].itb)
 
             # When connecting the caches, the clock is also inherited
             # from the CPU in question
